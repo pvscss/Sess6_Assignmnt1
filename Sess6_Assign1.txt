@@ -1,0 +1,14 @@
+Task 1 : data$Surname<-sapply(data$name,function(x) strsplit(as.character(x),split='[,.]')[[1]][1])
+Task 2 : data$famsize<-data$sibsp+data$parch +1
+ggplot(data,aes(x=famsize,fill=factor(survived)))+
+geom_bar(stat='count')+scale_x_continuous(breaks=c(1:30))+
+labs(x='Family Size')+geom_text(stat='count',aes(label=..count..),size=4)
+
+Task 3 : 
+library(mice)
+library(randomForest)
+mice_det<-mice(data[,!names(data) %in% c('name','ticket','cabin','family','Surname','survived')],method='rf')
+mice_out<-complete(mice_det)
+par(mfrow=c(1,2))
+hist(data$age,freq=F,main='Age: Original Data',col='brown',ylim=c(0,0.04))
+hist(mice_out$age,freq=F,main='Age: MICE OUTPUT',col='orange',ylim=c(0,0.04))
